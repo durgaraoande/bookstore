@@ -31,7 +31,7 @@ public class RouteController {
         return "add";
     }
 
-    @GetMapping("add/{id}")
+    @GetMapping("edit/{id}")
     public String edit(@PathVariable int id,Model m){
         m.addAttribute("book", bookService.findById(id));
         return "editform";
