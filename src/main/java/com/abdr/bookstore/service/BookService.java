@@ -22,5 +22,17 @@ public class BookService {
     public void save(Book book) {
         repo.save(book);
     }
+
+    public void update(Book book) {
+        repo.save(book);
+    }
+
+    public Book findById(int id) {
+        return repo.findById(id).orElse(new Book());
+    }
+
+    public void delete(int id) {
+        repo.deleteById(id);
+    }
     
 }
