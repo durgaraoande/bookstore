@@ -3,8 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Book</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f5f5f5; /* Default background color */
+            color: #333; /* Default text color */
+            transition: background-color 0.3s, color 0.3s;
+        }
+        /* Responsive navigation bar */
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .toggle-dark-mode {
+            float: right;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+        .toggle-dark-mode:hover {
+            background-color: #555;
+        }
+        /* Form styles */
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            color: #333; /* Text color for form elements */
+        }
+        label {
+            font-weight: bold;
+            color: #333; /* Text color for labels */
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #333; /* Text color for input fields */
+            background-color: #fff; /* Background color for input fields */
+        }
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #333 !important;
+            color: #f5f5f5 !important;
+        }
+        /* Footer styles */
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
+    <div class="navbar">
+        <a href="#" th:href="@{/}" th:text="Home"></a>
+        
+        <div class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</div>
+    </div>
     <h1>Add Book</h1>
     <form th:action="@{/books}" method="post">
         <label for="title">Title:</label>
@@ -18,5 +112,16 @@
         
         <input type="submit" value="Add Book">
     </form>
+
+    <footer>
+        &copy; 2024 Bookstore
+    </footer>
+
+    <script>
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle('dark-mode');
+        }
+    </script>
 </body>
 </html>

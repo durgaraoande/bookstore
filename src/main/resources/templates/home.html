@@ -2,10 +2,99 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Bookstore - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f5f5f5; /* Default background color */
+            color: #333; /* Default text color */
+            transition: background-color 0.3s, color 0.3s;
+        }
+        /* Responsive navigation bar */
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .toggle-dark-mode {
+            float: right;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+        .toggle-dark-mode:hover {
+            background-color: #555;
+        }
+        /* Styling for the table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #333 !important;
+            color: #f5f5f5 !important;
+        }
+        /* Anchor tag styles */
+        a.edit-link {
+            color: #007bff; /* Blue color for edit link */
+            text-decoration: none;
+        }
+        a.edit-link:hover {
+            text-decoration: underline;
+        }
+        a.delete-link {
+            color: #dc3545; /* Red color for delete link */
+            text-decoration: none;
+        }
+        a.delete-link:hover {
+            text-decoration: underline;
+        }
+        /* Footer styles */
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
+    <div class="navbar">
+        <a href="#" th:href="@{/}" th:text="Home"></a>
+        <a href="#" th:href="@{/add}">Add Book</a>
+        <div class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</div>
+    </div>
     <h1>Bookstore</h1>
-    <a href="/add">Add Book</a>
     <h2>All Books</h2>
     <table>
         <tr>
@@ -21,9 +110,20 @@
             <td th:text="${book.title}"></td>
             <td th:text="${book.author}"></td>
             <td th:text="${book.price}"></td>
-            <td><a th:href="@{/add/{id}(id=${book.id})}">Edit</a></td>
-            <td><a th:href="@{/delete/{id}(id=${book.id})}">Del</a></td>
+            <td><a th:href="@{/edit/{id}(id=${book.id})}" class="edit-link">Edit</a></td>
+            <td><a th:href="@{/delete/{id}(id=${book.id})}" class="delete-link" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a></td>
         </tr>
     </table>
+
+    <footer>
+        &copy; 2024 Bookstore
+    </footer>
+
+    <script>
+        function toggleDarkMode() {
+            var body = document.body;
+            body.classList.toggle('dark-mode');
+        }
+    </script>
 </body>
 </html>
