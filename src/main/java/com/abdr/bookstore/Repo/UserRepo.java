@@ -7,6 +7,6 @@ import com.abdr.bookstore.models.User;
 
 
 @Repository
-public interface UserRepo extends JpaRepository<User, String>{
+public interface UserRepo extends JpaRepository<User, Integer>{
     User findByUsername(String username);
 }
