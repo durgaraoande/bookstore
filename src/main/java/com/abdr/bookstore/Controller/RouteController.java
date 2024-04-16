@@ -42,4 +42,16 @@ public class RouteController {
         bookService.delete(id);
         return "redirect:/";
     }
+
+    
+
+    @GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+
+    @GetMapping("/register")
+	public String register() {
+		return "register";
+	}
 }
