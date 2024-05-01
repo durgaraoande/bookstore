@@ -6,47 +6,24 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.abdr.bookstore.models.Book;
 import com.abdr.bookstore.service.BookService;
 
 @Controller
-@RequestMapping("/admin")
-@PreAuthorize("hasRole('ADMIN')")
-public class RouteController {
+@RequestMapping("/user")
+public class UserRouteController {
 
     private BookService bookService;
-    public RouteController(BookService bookService) {
+    public UserRouteController(BookService bookService) {
         this.bookService = bookService;
     }
-    
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/")
     public String home(Model model) {
         List<Book> books=bookService.findAll();
         model.addAttribute("books", books);
-        return "home";
+        return "user-home";
     }
-
-    @RequestMapping("add")
-    public String add(){
-        return "add";
-    }
-
-    
-    @GetMapping("edit/{id}")
-    public String edit(@PathVariable int id,Model m){
-        m.addAttribute("book", bookService.findById(id));
-        return "editform";
-    }
-
-    
-    @GetMapping("delete/{id}")
-    public String delete(@PathVariable int id){
-        bookService.delete(id);
-        return "redirect:/admin/";
-    }
-
-    
 }

@@ -1,7 +1,7 @@
 package com.abdr.bookstore.models;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,14 +12,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserPrinciple implements UserDetails {
 
     private User user;
-    public UserPrinciple(User user){
-        this.user=user;
+    private Collection<String> roles;
+
+    public UserPrinciple(User user, Collection<String> roles) {
+        this.user = user;
+        this.roles = roles;
     }
+
+    // @Override
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    //     return Collections.singleton(new SimpleGrantedAuthority("USER"));
+    // }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        return roles.stream()
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
     }
+
 
     @Override
     public String getPassword() {

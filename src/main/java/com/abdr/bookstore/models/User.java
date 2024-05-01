@@ -1,6 +1,9 @@
 package com.abdr.bookstore.models;
 
 import jakarta.persistence.Table;
+
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
@@ -24,5 +27,5 @@ public class User {
     private String username;
 
     private String password;
-    private String role;
+    private List<String> roles;
 }

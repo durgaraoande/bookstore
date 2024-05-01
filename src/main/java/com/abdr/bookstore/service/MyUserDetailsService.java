@@ -25,7 +25,7 @@ public class MyUserDetailsService implements UserDetailsService{
             System.out.println("user 404");
             throw new UsernameNotFoundException("username 404");
         }
-        return new UserPrinciple(user);
+        return new UserPrinciple(user,user.getRoles());
     }
     
 }
