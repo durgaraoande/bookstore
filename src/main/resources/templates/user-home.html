@@ -93,6 +93,8 @@
         <a href="#" th:href="@{/user/}" th:text="Home"></a>
         <a href="#" th:href="@{/logout}">Logout</a>
         <a href="#" th:href="@{/admin/}">Go to Admin-Home</a>
+        <a href="#" th:href="@{/user/cart}">Go to Cart</a>
+        <a th:href="@{/user/transactions}">View Transactions</a>
         <div class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</div>
     </div>
     <h1>Bookstore</h1>
@@ -110,7 +112,11 @@
             <td th:text="${book.title}"></td>
             <td th:text="${book.author}"></td>
             <td th:text="${book.price}"></td>
-            <td><a>Add to Cart</a></td>
+            <td>
+                <form th:action="@{/user/cart/add(bookId=${book.id})}" method="post">
+                    <input type="submit" value="Add to Cart" />
+                </form>
+            </td>
         </tr>
     </table>
 

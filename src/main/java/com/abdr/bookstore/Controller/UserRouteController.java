@@ -1,5 +1,6 @@
 package com.abdr.bookstore.Controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,21 +10,36 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.abdr.bookstore.models.Book;
+import com.abdr.bookstore.models.User;
 import com.abdr.bookstore.service.BookService;
+import com.abdr.bookstore.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
 public class UserRouteController {
 
     private BookService bookService;
-    public UserRouteController(BookService bookService) {
+    private UserService userService;
+    public UserRouteController(BookService bookService,UserService userService) {
         this.bookService = bookService;
+        this.userService=userService;
     }
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/")
-    public String home(Model model) {
-        List<Book> books=bookService.findAll();
+    public String home(Model model, Principal principal, HttpSession session) {
+        List<Book> books = bookService.findAll();
         model.addAttribute("books", books);
+    
+        if (principal != null) {
+            User user = userService.findByUsername(principal.getName());
+            if (user != null) {
+                model.addAttribute("user", user);
+                session.setAttribute("userId", user.getId());
+            }
+        }
+    
         return "user-home";
     }
 }

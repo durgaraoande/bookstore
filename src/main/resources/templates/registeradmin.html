@@ -1,28 +1,92 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Register</title>
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        /* Main section styles */
+        section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .main {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+        }
+        /* Form styles */
+        .login-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .login-form button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .login-form button:hover {
+            background-color: #0056b3;
+        }
+        .login-form .btn-black {
+            background-color: #333;
+        }
+        .login-form .btn-black:hover {
+            background-color: #555;
+        }
+        .alert {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+        }
+    </style>
 </head>
-    <section >
+<body>
+    <section>
         <div class="main">
             <div class="col-md-6 col-sm-12">
-                <div th:if="${param.fail}" class="alert alert-danger">
+                <div th:if="${param.fail}" class="alert">
                     <span th:text="${param.errorMessage}">Username or email already exists</span>
                 </div>
                 <div class="login-form">
                     <form method="post" th:action="@{/register-admin}">
                         <div>
                             <input type="text" name="username" placeholder="Username" required/>
-                            </div>
-                            <div>
+                        </div>
+                        <div>
                             <input type="password" name="password" placeholder="Password" required/>
-                            </div>
-                        <button th:href="@{/register}" type="submit" class="btn btn-secondary">Register</button>
-                        
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Register</button>
                     </form>
-                    <a th:href="@{/login}"  class="btn btn-black">Already have an account? Login here.</a>
+                    <a th:href="@{/login}" class="btn btn-black">Already have an account? Login here.</a>
                 </div>
             </div>
         </div>
     </section>
+</body>
 </html>

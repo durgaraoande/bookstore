@@ -11,8 +11,8 @@ import lombok.Data;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    String title;
-    String author;
-    double price;
+    private int id;
+    private String title;
+    private String author;
+    private double price;
 }

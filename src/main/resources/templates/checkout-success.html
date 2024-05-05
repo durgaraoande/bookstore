@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout Success</title>
+    <style>
+        /* Basic styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        /* Navigation styles */
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        /* Main content styles */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        ul li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" th:href="@{/user/}" th:text="Home"></a>
+    </nav>
+    <div class="container">
+        <h1>Checkout Successful!</h1>
+
+        <h2>Transaction Details</h2>
+        <p th:if="${transaction.isPresent()}">
+            Transaction ID: <span th:text="${transaction.get().id}"></span><br>
+            Total Amount: <span th:text="${transaction.get().amount}"></span><br>
+            <!-- Add other transaction details here -->
+        </p>
+        <p th:unless="${transaction.isPresent()}">Transaction not found.</p>
+
+        <h2>Payment Methods</h2>
+        <ul>
+            <li th:each="method : ${paymentMethods}" th:text="${method}"></li>
+        </ul>
+    </div>
+</body>
+</html>

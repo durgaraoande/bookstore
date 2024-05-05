@@ -1,6 +1,7 @@
 package com.abdr.bookstore.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -24,11 +25,20 @@ public class BookService {
     }
 
     public void update(Book book) {
-        repo.save(book);
+        Optional<Book> existingBook = repo.findById(book.getId());
+        if (existingBook.isPresent()) {
+            existingBook.get().setId(book.getId());
+            existingBook.get().setTitle(book.getTitle());
+            existingBook.get().setAuthor(book.getAuthor());
+            existingBook.get().setPrice(book.getPrice());
+            repo.save(existingBook.get());
+        } else {
+            throw new RuntimeException("Book not found");
+        }
     }
 
-    public Book findById(int id) {
-        return repo.findById(id).orElse(new Book());
+    public Book findById(int bookId) {
+        return repo.findById(bookId).orElse(new Book());
     }
 
     public void delete(int id) {
