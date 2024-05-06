@@ -21,12 +21,16 @@ import com.abdr.bookstore.models.Book;
 import com.abdr.bookstore.models.Cart;
 import com.abdr.bookstore.models.CartItem;
 import com.abdr.bookstore.models.Transaction;
+import com.abdr.bookstore.models.TransactionItem;
 import com.abdr.bookstore.models.User;
 import com.abdr.bookstore.service.BookService;
 import com.abdr.bookstore.service.CartItemService;
 import com.abdr.bookstore.service.CartService;
+import com.abdr.bookstore.service.TransactionItemService;
 import com.abdr.bookstore.service.TransactionService;
 import com.abdr.bookstore.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
@@ -50,6 +54,9 @@ public class CartController {
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private TransactionItemService transactionItemService;
 
     @PostMapping("/user/cart/add")
     public String addToCart(@RequestParam int bookId, Principal principal) {
@@ -113,7 +120,7 @@ public class CartController {
 
 
     @PostMapping("/user/cart/checkout")
-    public ResponseEntity<String> checkout(Principal principal) {
+    public ResponseEntity<String> checkout(Principal principal,HttpSession session) {
        try{
         User user = userService.findByUsername(principal.getName());
         Cart cart = user.getCart();
@@ -122,15 +129,38 @@ public class CartController {
         double totalPrice = cart.getItems().stream()
                     .mapToDouble(item -> item.getBook().getPrice() * item.getQuantity())
                     .sum();
-        // Clear the cart
-        cartService.clearCart(cart);
+        
     
         // Add the transaction to the user's transaction history
         Transaction transaction = new Transaction();
         transaction.setUser(user);
         transaction.setAmount(totalPrice);
+        
+        // Save the transaction first to generate an ID
         transactionService.save(transaction);
-        return ResponseEntity.ok("/user/checkout-success?transactionId=" + transaction.getId());
+
+        List<TransactionItem> transactionItems = cart.getItems().stream()
+            .map(cartItem -> {
+                TransactionItem transactionItem = new TransactionItem();
+                transactionItem.setBook(cartItem.getBook());
+                transactionItem.setTransaction(transaction);
+                transactionItem.setQuantity(cartItem.getQuantity());
+                // set other fields like quantity, price, etc.
+                transactionItemService.save(transactionItem);
+                return transactionItem;
+            })
+            .collect(Collectors.toList());
+
+        transaction.setPurchasedBooks(transactionItems);
+
+        // Update the transaction with the purchased books
+        transactionService.save(transaction);
+
+        // Clear the cart
+        cartService.clearCart(cart);
+        Long transactionId = transaction.getId();
+        session.setAttribute("transactionId", transactionId);
+        return ResponseEntity.ok("/user/checkout-success");
        }
        catch (Exception e) {
         // Log the exception
@@ -143,7 +173,8 @@ public class CartController {
     }
 
     @GetMapping("/user/checkout-success")
-    public String checkoutSuccess(@RequestParam("transactionId") Long transactionId, Model model) {
+    public String checkoutSuccess(Model model,HttpSession session) {
+        Long transactionId = (Long) session.getAttribute("transactionId");
         Optional<Transaction> transaction = transactionService.findById(transactionId);
         model.addAttribute("transaction", transaction);
     

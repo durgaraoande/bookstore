@@ -1,5 +1,6 @@
 package com.abdr.bookstore.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,14 @@ public class BookService {
 
     public void delete(int id) {
         repo.deleteById(id);
+    }
+
+    public List<Book> findByTitle(String title) {
+        List<Book> books = repo.findByTitleContaining(title);
+        if (books == null) {
+            books = new ArrayList<>();
+        }
+        return books;
     }
     
 }

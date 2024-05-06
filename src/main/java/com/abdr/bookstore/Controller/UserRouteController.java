@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.abdr.bookstore.models.Book;
 import com.abdr.bookstore.models.User;
@@ -41,5 +42,28 @@ public class UserRouteController {
         }
     
         return "user-home";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/search")
+    public String search(Model model, Principal principal, HttpSession session,@RequestParam String title) {
+        List<Book> books = bookService.findByTitle(title);
+        model.addAttribute("books", books);
+    
+        if (principal != null) {
+            User user = userService.findByUsername(principal.getName());
+            if (user != null) {
+                model.addAttribute("user", user);
+                session.setAttribute("userId", user.getId());
+            }
+        }
+    
+        return "user-home";
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/searchform")
+    public String searchForm() {
+        return "search";
     }
 }

@@ -61,10 +61,18 @@
         <tr>
             <th>Date</th>
             <th>Amount</th>
+            <th>Purchased Books</th>
         </tr>
         <tr th:each="transaction : ${transactions}">
             <td th:text="${#dates.format(transaction.date, 'yyyy-MM-dd HH:mm:ss')}"></td>
             <td th:text="${transaction.amount}"></td>
+            <td>
+                <div th:each="item : ${transaction.purchasedBooks}" style="margin-bottom: 20px; border: 1px solid #ddd; padding: 10px;">
+                    <h3 th:text="${item.book.title}" style="margin: 0;"></h3>
+                    <p style="margin: 0;">Quantity: <span th:text="${item.quantity}"></span></p>
+                    <!-- display other book properties... -->
+                </div>
+            </td>
         </tr>
     </table>
 </body>
